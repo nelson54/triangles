@@ -1,7 +1,20 @@
-let verticeRandomnessDepth;
+let randomDepthMin,
+    randomDepthMax,
+    randomRemovalDepthMin,
+    randomRemovalDepthMax;
 
 class Main {
-    constructor(size=1000, depth=1, seed, useColors, useRandomVertices, _verticeRandomnessDepth = 5) {
+    constructor(
+        size=1000,
+        depth=1,
+        seed,
+        useColors,
+        useRandomVertices,
+        _randomDepthMin=0,
+        _randomDepthMax=100,
+        _randomRemovalDepthMin,
+        _randomRemovalDepthMax
+    ) {
 
         console.log(`using seed: ${seed}`);
         this.useColors = useColors;
@@ -13,7 +26,11 @@ class Main {
         this.depth = depth;
         this.shapesByDepth = {};
         this.pallette = this.randomPallette;
-        verticeRandomnessDepth = _verticeRandomnessDepth;
+
+        randomDepthMin = _randomDepthMin;
+        randomDepthMax = _randomDepthMax;
+        randomRemovalDepthMin = _randomRemovalDepthMin;
+        randomRemovalDepthMax = _randomRemovalDepthMax;
     }
 
     createCanvas() {
@@ -82,8 +99,8 @@ class Main {
 
     drawParent(parent) {
         this.drawPolygon(parent);
-        if(parent.polygons.length > 0 &&
-            (parent.depth >= 11 && this.random.random() > .5) || (parent.depth <= 10 && this.random.random() > .1)) {
+        if((parent.depth >= randomRemovalDepthMin && parent.depth <= randomRemovalDepthMax) &&
+            (parent.polygons.length > 0 && (parent.depth >= 11 && this.random.random() > .5) || (parent.depth <= 10 && this.random.random() > .1))) {
             parent.polygons.forEach((poly) => {
                 this.drawParent(poly);
             })
@@ -126,7 +143,6 @@ class Square {
 
     breakUp() {
         let halfSize = this.size/2;
-        let useRandomVertices = this.useRandomVertices;
         let topLeft = new Point(this.x, this.y),
             topRight = new Point(this.x + this.size, this.y),
             bottomLeft = new Point(this.x, this.y + this.size),
@@ -154,15 +170,15 @@ class Triangle {
     get r () {
         let values = [.35, .4, .45, .5, .55];
 
-        return values[Math.floor(Math.random() * values.length)];
+        return this.random.lastRandomValue; //values[Math.floor(this.random.lastRandomValue * values.length)];
     }
 
     breakUp() {
         let median,
             ps = this.points;
 
-        if(this.useRandomVertices || this.depth > verticeRandomnessDepth) {
-            median = new Point(((ps[0].x - ps[1].x) * this.random.lastRandomValue) + ps[1].x, ((ps[0].y - ps[1].y) * this.random.lastRandomValue) + ps[1].y);
+        if(this.useRandomVertices && ((randomDepthMin + randomDepthMax) === 0 || (this.depth >= randomDepthMin && this.depth <= randomDepthMax))) {
+            median = new Point(((ps[0].x - ps[1].x) * this.r) + ps[1].x, ((ps[0].y - ps[1].y) * this.r) + ps[1].y);
         } else {
             median = new Point(Math.ceil((ps[0].x + ps[1].x) / 2), Math.ceil((ps[0].y + ps[1].y) / 2));
         }

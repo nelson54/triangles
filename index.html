@@ -38,6 +38,23 @@
                 <input type="checkbox" id="use-random-vertices" name="random-vertices" checked />
                 <label for="use-random-vertices">Randomized Vertices</label>
             </p>
+            <p>
+                <label for="random-vertice-depth-min">Random vertice Depth Min:</label>
+                <input type="text" id="random-vertice-depth-min" value="0" />
+            </p>
+            <p>
+                <label for="random-vertice-depth-max">Random vertice Depth Max:</label>
+                <input type="text" id="random-vertice-depth-max" value="30" />
+            </p>
+
+            <p>
+                <label for="random-removal-depth-min">Random removal Depth Min:</label>
+                <input type="text" id="random-removal-depth-min" value="0" />
+            </p>
+            <p>
+                <label for="random-vertice-depth-max">Random removal Depth Max:</label>
+                <input type="text" id="random-removal-depth-max" value="30" />
+            </p>
 
             <button id="generate">Generate</button>
         </div>
@@ -46,8 +63,8 @@
 
 
         <script type="text/javascript">
-            function redraw(depth, seed, useColors, useRandomVertices) {
-                let main = new Main(1000, depth, seed, useColors, useRandomVertices);
+            function redraw(depth, seed, useColors, useRandomVertices, randomVerticeDepthMin, randomVerticeDepthMax, randomRemovalDepthMin, randomRemovalDepthMax) {
+                let main = new Main(1000, depth, seed, useColors, useRandomVertices, randomVerticeDepthMin, randomVerticeDepthMax, randomRemovalDepthMin, randomRemovalDepthMax);
 
                 main.generate();
                 main.draw();
@@ -60,6 +77,18 @@
                 let useRandomSeedElement = document.getElementById('use-random-seed');
                 let useColorsElement = document.getElementById('use-colors');
 
+                //Randomize Vertices
+                let randomVerticeDepthMinElement = document.getElementById('random-vertice-depth-min');
+                let randomVerticeDepthMaxElement = document.getElementById('random-vertice-depth-max');
+                let randomVerticeDepthMin = parseInt(randomVerticeDepthMinElement.value);
+                let randomVerticeDepthMax = parseInt(randomVerticeDepthMaxElement.value);
+
+                //Randomized pruning
+                let randomRemovalDepthMinElement = document.getElementById('random-removal-depth-min');
+                let randomRemovalDepthMaxElement = document.getElementById('random-removal-depth-max');
+                let randomRemovalDepthMin = parseInt(randomRemovalDepthMinElement.value);
+                let randomRemovalDepthMax = parseInt(randomRemovalDepthMaxElement.value);
+
                 if(useRandomSeedElement.checked){
                     seedElement.value = seed = Math.random() * 1000000000;
                 } else {
@@ -68,7 +97,15 @@
                 let depth = parseInt(document.getElementById('depth').value);
 
                 console.log('something' + depth);
-                redraw(depth, seed, useColorsElement.checked, useRandomVerticesElement.checked);
+                redraw(depth,
+                    seed,
+                    useColorsElement.checked,
+                    useRandomVerticesElement.checked,
+                    randomVerticeDepthMin,
+                    randomVerticeDepthMax,
+                    randomRemovalDepthMin,
+                    randomRemovalDepthMax
+                );
             }
 
             document.addEventListener('DOMContentLoaded', ()=> {
