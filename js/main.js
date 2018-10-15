@@ -168,9 +168,7 @@ class Triangle {
     }
 
     get r () {
-        let values = [.35, .4, .45, .5, .55];
-
-        return this.random.lastRandomValue; //values[Math.floor(this.random.lastRandomValue * values.length)];
+        return [.35, .4, .45, .5, .55][Math.floor(this.random.lastRandomValue * 5)];
     }
 
     breakUp() {
