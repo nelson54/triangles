@@ -29,6 +29,7 @@
         <![endif]-->
         <script src="js/main.js"></script>
 
+        <a href="https://github.com/nelson54/triangles"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
 
         <main>
             <div id="draw-area"></div>
@@ -123,10 +124,6 @@
 
             document.addEventListener('DOMContentLoaded', ()=> {
                 let generateButton = document.getElementById('generate');
-
-                let redrawButton = document.createElement('button');
-                document.body.appendChild(redrawButton);
-                redrawButton.innerText = 'Redraw';
 
                 let seedElement = document.getElementById('seed');
                 seedElement.value = 869704733.0747604;
